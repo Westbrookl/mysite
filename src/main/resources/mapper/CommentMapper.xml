@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+        <!--void addComment(Comment comment);-->
+        <!--void deleteComment(Integer coid);-->
+        <!--void updateCommentStatus(Integer coid,String status);-->
+        <!--Comment getCommentById(Integer coid);-->
+        <!--List<Comment> getCommentByCId(Integer cid);-->
+    <!--PageInfo<Comment> getCommentByCond(CommentCond commentCond,int pageNum,int pageSize);-->
+<mapper namespace="com.dao.CommentDao">
+    <sql id="BASE_TABLE">
+        t_comments
+    </sql>
+    <sql id="BASE_COLUMN">
+        cm.coid,cm.cid,cm.created,cm.author,cm.authorId,cm.ownerId,cm.mail,cm.url,cm.ip,cm.agent,cm.content,cm.type,cm.status,cm.parent
+    </sql>
+
+
+    <!--新增评论-->
+    <insert id="addComment" parameterType="comment">
+        INSERT INTO
+        <include refid="BASE_TABLE"/>
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            cid,created,author,authorId,ownerId,mail,url,ip,agent,content,type,status,parent,
+        </trim>
+        <trim prefix="VALUES(" suffix=")" suffixOverrides=",">
+            #{cid,jdbcType=INTEGER},#{created,jdbcType=INTEGER},#{author,jdbcType=VARCHAR},#{authorId,jdbcType=INTEGER},#{ownerId,jdbcType=INTEGER},
+            #{mail,jdbcType=VARCHAR},#{url,jdbcType=VARCHAR},#{ip,jdbcType=VARCHAR},#{agent,jdbcType=VARCHAR},#{content,jdbcType=LONGVARCHAR},#{type,jdbcType=VARCHAR},
+            #{status,jdbcType=VARCHAR},#{parent,jdbcType=INTEGER},
+        </trim>
+    </insert>
+
+
+
+    <!--删除评论-->
+    <delete id="deleteComment">
+        DELETE FROM
+        <include refid="BASE_TABLE"/>
+        WHERE coid=#{coid,jdbcType=INTEGER}
+    </delete>
+
+   <!--更新评论状态-->
+    <update id="updateCommentStatus">
+        UPDATE
+        <include refid="BASE_TABLE"/>
+        SET status=#{status,jdbcType=VARCHAR}
+        WHERE coid=#{coid,jdbcType=INTEGER}
+    </update>
+
+
+    <!--通过评论id得到评论-->
+    <select id="getCommentById" resultType="comment">
+        SELECT
+        <include refid="BASE_COLUMN"/>
+        FROM
+        <include refid="BASE_TABLE"/>
+        AS cm
+        WHERE cm.coid=#{coid,jdbcType=INTEGER}
+    </select>
+
+    <!--筛选出文章所有通过的评论。值得注意的是这个的返回结果是一个List的集合而上面的那个是一个结果但是在SQL语句上却没有区别-->
+    <select id="getCommentsByCId" resultType="comment">
+        SELECT
+        <include refid="BASE_COLUMN"/>
+        FROM
+        <include refid="BASE_TABLE"/>
+        AS cm
+        WHERE cm.cid=#{cid,jdbcType=INTEGER}
+        AND cm.status = "approved"
+        ORDER BY cm.created
+    </select>
+
+    <!--根据条件查找评论列表-->
+    <select id="getCommentByCond" resultType="comment" parameterType="com.dto.cond.ContentCond">
+        SELECT
+        <include refid="BASE_COLUMN"/>
+        FROM
+        <include refid="BASE_TABLE"/>
+        AS cm
+        <where>
+            <if test="status != null">
+                AND cm.status = #{status,jdbcType=VARCHAR}
+            </if>
+            <if test="startTime != null">
+                AND cm.created >= #{startTime,jdbcType=INTEGER}
+            </if>
+            <if test="endTime != null">
+                AND cm.created &lt;= #{endTime,jdbcType=INTEGER}
+            </if>
+            <if test="parent != null">
+                AND cm.parent = #{parent,jdbcType=INTEGER}
+            </if>
+        </where>
+        ORDER BY cm.created
+    </select>
+
+
+    <!--筛选出所有的评论数-->
+    <select id="getCommnetCount" resultType="java.lang.Long">
+        SELECT count(*)
+        FROM
+        <include refid="BASE_TABLE"/>
+    </select>
+
+</mapper>
