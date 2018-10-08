@@ -94,6 +94,12 @@
             <artifactId>emoji-java</artifactId>
             <version>3.2.0</version>
         </dependency>
+        <!--使用thymeleaf模板-->
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
