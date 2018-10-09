@@ -53,7 +53,7 @@ $.tale.prototype.post = function(options){
         dataType:'json',
         success:function(result){
             // self.hideLoading();
-            options.success&&options.success(result);
+            options.success && options.success(result);
         },
         error:function () {
 

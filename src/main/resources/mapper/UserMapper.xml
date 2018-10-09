@@ -33,7 +33,7 @@
         uid = #{uid,jdbcType=INTEGER}
     </select>
 
-    <select id="getUSerInfoByCond" resultType="user">
+    <select id="getUserInfoByCond" resultType="user">
         SELECT
         <include refid="basic_column"/>
         FROM

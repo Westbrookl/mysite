@@ -2,7 +2,7 @@ package com.utils;
 
 
 import com.constant.WebConst;
-import com.controller.admin.AttAchController;
+//import com.controller.admin.AttAchController;
 import com.entity.User;
 import com.exception.BusinessException;
 import org.apache.commons.lang3.StringUtils;
@@ -410,25 +410,25 @@ public class TaleUtils {
         return file.getAbsolutePath() + "/";
     }
 
-    public static String getFileKey(String name) {
-        String prefix = "/upload/" + DateKit.dateFormat(new Date(), "yyyy/MM");
-        if (!new File(AttAchController.CLASSPATH + prefix).exists()) {
-            new File(AttAchController.CLASSPATH + prefix).mkdirs();
-        }
-
-        name = StringUtils.trimToNull(name);
-        if (name == null) {
-            return prefix + "/" + UUID.UU32() + "." + null;
-        } else {
-            name = name.replace('\\', '/');
-            name = name.substring(name.lastIndexOf("/") + 1);
-            int index = name.lastIndexOf(".");
-            String ext = null;
-            if (index >= 0) {
-                ext = StringUtils.trimToNull(name.substring(index + 1));
-            }
-            return prefix + "/" + UUID.UU32() + "." + (ext == null ? null : (ext));
-
-        }
-    }
+//    public static String getFileKey(String name) {
+//        String prefix = "/upload/" + DateKit.dateFormat(new Date(), "yyyy/MM");
+//        if (!new File(AttAchController.CLASSPATH + prefix).exists()) {
+//            new File(AttAchController.CLASSPATH + prefix).mkdirs();
+//        }
+//
+//        name = StringUtils.trimToNull(name);
+//        if (name == null) {
+//            return prefix + "/" + UUID.UU32() + "." + null;
+//        } else {
+//            name = name.replace('\\', '/');
+//            name = name.substring(name.lastIndexOf("/") + 1);
+//            int index = name.lastIndexOf(".");
+//            String ext = null;
+//            if (index >= 0) {
+//                ext = StringUtils.trimToNull(name.substring(index + 1));
+//            }
+//            return prefix + "/" + UUID.UU32() + "." + (ext == null ? null : (ext));
+//
+//        }
+//    }
 }

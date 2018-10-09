@@ -41,7 +41,8 @@ public class BusinessException extends RuntimeException{
     }
     public static BusinessException withErrorCode(String errorCode){
         BusinessException businessException = new BusinessException();
-        businessException.errorCode = errorCode;
+//        businessException.errorCode = errorCode;
+        businessException.setErrorCode(errorCode);
         return businessException;
     }
     public  BusinessException withErrorMessageArguments(String... errorMessageArguements){

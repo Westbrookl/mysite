@@ -18,5 +18,5 @@ public interface UserDao {
     /**
      *根据用户名密码得到用户信息
      */
-    User getUSerInfoByCond(@Param("username")String username,@Param("password") String password);
+    User getUserInfoByCond(@Param("username")String username,@Param("password") String password);
 }

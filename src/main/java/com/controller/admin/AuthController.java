@@ -17,9 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -41,7 +39,7 @@ public class AuthController {
     @Autowired
     private LogService logService;
 
-    private MapCache cache;
+    private MapCache cache = new MapCache();
     @ApiOperation("跳转到登录页面")
     @GetMapping(value="/login")
     public String login(){
@@ -50,6 +48,7 @@ public class AuthController {
 
     @ApiOperation("登录")
     @PostMapping("/login")
+    @ResponseBody
     public APIResponse toLogin(
             HttpServletRequest request,
             HttpServletResponse response,
@@ -68,22 +67,31 @@ public class AuthController {
                 TaleUtils.setCookie(response,userInfo.getUid());
             }
             logService.addLog(LogActions.LOGIN.getAction(),null,request.getRemoteAddr(),userInfo.getUid());
-
+//            System.out.println(222222);
         }catch (Exception e){
+//            System.out.println(333333333);
             LOGGER.error(e.getMessage());
-            error_count = error_count==null?1:error_count+1;
-            if(error_count>3){
+            error_count = error_count==null ? 1: error_count+1;
+            System.out.println(error_count);
+            if(error_count > 3){
                 return APIResponse.fail("您输入密码已经错误超过3次，请10分钟后尝试");
             }
             cache.set("login_error_count",error_count,10*60);
             String msg = "登录失败";
             if(e instanceof BusinessException){
-                msg = e.getMessage();
+
+                msg = ((BusinessException) e).getErrorCode();
+
             }else{
+
                 LOGGER.error(msg,e);
             }
+
+//            System.out.println(msg);
+//            System.out.println("1---------------");
             return APIResponse.fail(msg);
         }
+//        System.out.println(44444);
         return APIResponse.success();
     }
 
