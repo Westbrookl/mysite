@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>index</title>
+</head>
+<body>
+<h4>系统日志</h4>
+<ul>
+    <li th:each="log:${logs}">
+        <span th:text="${log.action}"></span>
+    </li>
+</ul>
+</body>
+</html>

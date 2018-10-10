@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title>个人信息界面</title>
+</head>
+<body>
+
+    <h3>个人信息</h3>
+    <div>
+        <form id="userInfo">
+            <div>
+                <label>账号</label>
+                <input type="text" readonly="readonly" th:value="${session.login_user.username}"/>
+            </div>
+            <div>
+                <label>姓名</label>
+                <input type="text" name="screenName" placeholder="请输入姓名" th:value="${session.login_user.screenName}" required="required"/>
+            </div>
+            <div>
+                <label>邮箱</label>
+                <input type="text" name="email" placeholder="请输入邮箱" th:value="${session.login_user.email}" required="required"/>
+            </div>
+            <div>
+                <button type="button" onclick="saveSetting()">保存信息</button>
+            </div>
+        </form>
+    </div>
+
+    <div>
+        <label>修改密码</label>
+        <form id="pwd-form">
+            <div>
+                <label>旧密码</label>
+                <input type="password" name="oldPassword" required="required"/>
+            </div>
+            <div>
+                <label>新密码</label>
+                <input type="password" name="newPassword"  id ="password"required="required" rangelength="[6,14]"/>
+            </div>
+            <div>
+                <label>确认新密码</label>
+                <input type="text" name="repass" equalTo=" #password"/>
+            </div>
+            <div>
+                <button type="submit">设置密码</button>
+            </div>
+        </form>
+    </div>
+    <script th:src="@{//cdn.bootcss.com/jquery/2.2.3/jquery.min.js}"></script>
+    <script th:src="@{//cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+    <script th:src="@{//cdn.bootcss.com/limonte-sweetalert2/6.4.1/sweetalert2.min.js}"></script>
+    <script th:src="@{//cdn.bootcss.com/jquery-validate/1.15.1/jquery.validate.min.js}"></script>
+    <script th:src="@{//cdn.bootcss.com/jquery-validate/1.15.1/localization/messages_zh.min.js}"></script>
+    <script th:src="@{/admin/js/base1.js}"></script>
+    <script type="text/javascript">
+        var tale = new $.tale();
+        /**
+         * 保存个人信息
+         */
+        function saveSetting(){
+            var param = $("#userInfo").serialize();
+            // alert(param);
+            tale.post({
+                    url:"/admin/profile",
+                    data:param,
+                    success: function (result) {
+                        if(result && result.code == 'success'){
+                            tale.alertOK('保存成功');
+                        }else{
+                            tale.alertError(result.msg || '保存失败');
+                        }
+                    }
+            });
+        }
+
+        $('#pwd-form').validate({
+            submitHandler:function (form) {
+                var params = $('#pwd-form').serialize();
+                alert(params);
+                tale.post({
+                    url:"/admin/password",
+                    data:params,
+                    success:function (result) {
+                        if(result && result.code == 'success'){
+                            tale.alertOK('密码保存成功');
+                        }else{
+                            tale.alertError(result.msg || '密码修改失败');
+                        }
+                    }
+                });
+            }
+        });
+
+    </script>
+</body>
+</html>

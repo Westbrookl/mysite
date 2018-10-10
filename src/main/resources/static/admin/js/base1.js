@@ -17,6 +17,15 @@ $.tale.prototype.alertError =  function(options){
     options.type = "question";
     this.alertBox(options);
 }
+$.tale.prototype.alertOK = function(options){
+    options = options.length?{text:options}:(options||{});
+    options.title = options.title ||'操作成功';
+    options.text = options.text;
+    options.showCancelButton = false;
+    options.showCloseButton = false;
+    options.type = 'success';
+    this.alertBox(options);
+}
 /**
  * 公共弹框
  * @param options

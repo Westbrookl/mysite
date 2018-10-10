@@ -39,8 +39,8 @@ public class UserServiceImpl implements UserService {
         if (StringUtils.isBlank(username) || StringUtils.isBlank(password))
             throw BusinessException.withErrorCode(ErrorConstant.Auth.USERNAME_PASSWORD_IS_EMPTY);
 
-        String pwd = TaleUtils.MD5encode(username + password);
-        User user = userDao.getUserInfoByCond(username, pwd);
+//        String pwd = TaleUtils.MD5encode(username + password);
+        User user = userDao.getUserInfoByCond(username, password);
         if (null == user){
             throw BusinessException.withErrorCode(ErrorConstant.Auth.USERNAME_PASSWORD_ERROR);
         }
