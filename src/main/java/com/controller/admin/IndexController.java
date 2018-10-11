@@ -99,9 +99,9 @@ public class IndexController extends BaseController {
 //            }
 //            return APIResponse.fail(msg);
 //        }
-        String temp1 = screenName;
-        String temp2 = email;
-        System.out.println(screenName+"----->"+email);
+//        String temp1 = screenName;
+//        String temp2 = email;
+//        System.out.println(screenName+"----->"+email);
             if(StringUtils.isNotBlank(screenName) && StringUtils.isNotBlank(email)){
                 User temp = new User();
                 temp.setUid(users.getUid());
@@ -118,6 +118,8 @@ public class IndexController extends BaseController {
             }
             return APIResponse.success();
     }
+
+
 
     /**
      * 修改密码

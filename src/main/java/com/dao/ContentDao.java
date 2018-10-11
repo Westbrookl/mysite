@@ -11,6 +11,10 @@ import java.util.List;
 /**
  * @author jhc
  * @date 2018-09-29
+ *
+ *
+ * 对于归档数据的内容不是很了解 没有继续写下去
+ * 新学到的是关于模糊查询的内容
  文章的持久层
 */
 @Mapper
@@ -72,7 +76,7 @@ public interface ContentDao {
      * @param contentCond
      * @return
      */
-    List<ArchiveDto> getArchive(ContentCond contentCond);
+//    List<ArchiveDto> getArchive(ContentCond contentCond);
 
     /**
      * 获取最近文章
@@ -81,6 +85,7 @@ public interface ContentDao {
     List<Content> getRecentlyArticle();
 
     /**
+     *
      * 搜索文章-根据标题
      * @param param
      * @return
