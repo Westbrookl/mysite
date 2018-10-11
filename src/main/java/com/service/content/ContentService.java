@@ -36,7 +36,7 @@ public interface ContentService {
      * 添加文章点击量
      * @param content
      */
-    void updateContentByCid(Content content);
+        void updateContentByCid(Content content);
 
     /**
      * 根据文章编号获取文章

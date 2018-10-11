@@ -1,4 +1,164 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.dao.ContentDao">
+    <sql id="BASE_TABLE">
+        t_contents
+    </sql>
+
+    <sql id="BASE_COLUMN">
+        l.cid,l.title,l,titlePic,l.slug,l.created,l.modified,l.content,l.authorId,l.type,l.status,l.tags,l.categories,l.hits,
+        l.commentsNum,l.allowComment,l.allowPing,l.allowFeed
+    </sql>
+    <!--添加文章
+
+    -->
+    <insert id="addArticle" parameterType="content" useGeneratedKeys="true" keyProperty="cid">
+        INSERT INTO
+        <include refid="BASE_TABLE"/>
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            title,titlePic,slug,created,content,authorId,type,status,tags,categories,hits,
+            commentNum,allowComment,allowPing,allowFeed,
+        </trim>
+        <trim prefix="VALUES(" suffix=")" suffixOverrides=",">
+            #{title,jdbcType=VARCHAR}, #{titlePic,jdbcType=VARCHAR}, #{slug,jdbcType=VARCHAR}, UNIX_TIMESTAMP(NOW()), #{content,jdbcType=LONGVARCHAR},
+            #{authorId,jdbcType=INTEGER}, #{type,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{tags,jdbcType=VARCHAR},
+            #{categories,jdbcType=VARCHAR}, #{hits,jdbcType=INTEGER}, #{commentNum,jdbcType=INTEGER}, #{allowComment,jdbcType=INTEGER},
+            #{allowPing,jdbcType=INTEGER}, #{allowFeed,jdbcType=INTEGER},
+        </trim>
+    </insert>
+    <!--删除文章-->
+    <!---->
+    <!---->
+    <delete id="deleteArticleById">
+        DELETE FROM
+        <include refid="BASE_TABLE"/>
+        WHERE cid=#{cid,jdbcType=INTEGER}
+    </delete>
+    <!--通过Cid来更新文章内容
+
+    -->
+    <update id="updateArticleById" parameterType="content">
+        UPDATE
+        <include refid="BASE_TABLE"/>
+        <set>
+            <if test="titlePic!=null">
+                titlePic=#{titlepic,jdbctType=VARCHAR},
+            </if>
+            <if test="slug!=null">
+                slug=#{slug,jdbctType=VARCHAR},
+            </if>
+            <if test="content!=null">
+                content=#{content,jdbctType=LONGVARCHAR},
+            </if>
+            midified = UNIX_TIMESTAMP(NOW()),
+            <if test="type!=null">
+                type=#{type,jdbctType=VARCHAR},
+            </if>
+            <if test="status!=null">
+                status=#{status,jdbctType=VARCHAR},
+            </if>
+            <if test="tags!=null">
+                tags=#{tags,jdbctType=VARCHAR},
+            </if>
+            <if test="categories!=null">
+                categories=#{categories,jdbctType=VARCHAR},
+            </if>
+            <if test="hits!=null">
+                hits=#{hits,jdbctType=INTEGER},
+            </if>
+            <if test="commentsNum!=null">
+                commentsNum=#{commentsNum,jdbctType=INTEGER},
+            </if>
+            <if test="allowComment!=null">
+                allowComment=#{allowComment,jdbctType=INTEGER},
+            </if>
+            <if test="allowPing!=null">
+                allowPing=#{allowPing,jdbctType=INTEGER},
+            </if>
+            <if test="allowFeed!=null">
+                allowFeed=#{allowFeed,jdbctType=INTEGER},
+            </if>
+        </set>
+        WHERE cid=#{cid,jdbcType=INTEGER}
+    </update>
+<!--根据文章Id更新文章评论数
+
+-->
+    <update id="updateArticleCommentCountById">
+        UPDATE
+        <include refid="BASE_TABLE"/>
+        SET commentsNum = #{commnetsNum,jdbcType=INTEGER}
+        WHERE cid = #{cid,jdbcType=INTEGER}
+    </update>
+    <!--通过Id来获取文章
+    -->
+    <select id="getArticleById" resultType="content">
+        SELECT
+        <include refid="BASE_COLUMN"/>
+        FROM
+        <include refid="BASE_TABLE"/>
+        AS l WHERE l.cid=#{cid,jdbcType=INTEGER}
+    </select>
+    <!--通过条件获取文章
+    -->
+    <select id="getArticleByCond" parameterType="com.dto.cond.ContentCond" resultType="content">
+        SELECT
+        <include refid="BASE_COLUMN"/>
+        FROM
+        <include refid="BASE_TABLE"/>
+        AS l
+        <where>
+            <if test="tag!=null">
+                AND l.tags LIKE CONCAT('%',#{tag,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="category!=null">
+                AND l.categories LIKE CONCAT('%',#{category,jdbcType=VARCHAR},'%')
+            </if>
+            <if test=" status != null">
+                AND l.status ={#status,jdbcType=VARCHAR}
+            </if>
+            <if test="title!=null">
+                AND l.title LIKE CONCAT('%',#{title,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="content!=null">
+                AND l.content LIKE CONCAT('%',#{content,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="type!=null">
+                AND l.type LIKE CONCAT('%',#{type,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="startTime !=null ">
+                AND l.created >= #{startTime,jdbcType=INTEGER}
+            </if>
+            <if test="endTime != null">
+                AND l.created &lt;= #{endTime, jdbcType=INTEGER}
+            </if>
+        </where>
+        ORDER BY l.created DESC
+    </select>
+    <!--得到所有的文章以创建时间排序
+
+    -->
+    <select id="getRecentlyArticle" resultType="content">
+        SELECT
+        cid,title
+        FROM
+        <include refid="BASE_TABLE"/>
+          ORDER BY created DESC
+    </select>
+    <!--模糊查询
+
+
+    -->
+    <select id="searchArticle" resultType="content">
+        SELECT
+        <include refid="BASE_COLUMN"/>
+        FROM
+        <include refid="BASE_TABLE"/>
+        AS l
+        <where>
+            l.title LIKE CONCAT('%',#{params,jdbcType=VARCHAR},'%')
+            OR
+            l.content LIKE CONCAT('%',#{params,jdbcType=VARCHAR},'%')
+        </where>
+    </select>
 </mapper>
