@@ -67,7 +67,8 @@ public class AuthController {
                 TaleUtils.setCookie(response,userInfo.getUid());
             }
             logService.addLog(LogActions.LOGIN.getAction(),null,request.getRemoteAddr(),userInfo.getUid());
-//            System.out.println(222222);
+
+            System.out.println(LogActions.LOGIN.getAction());
         }catch (Exception e){
 //            System.out.println(333333333);
             LOGGER.error(e.getMessage());
@@ -79,6 +80,7 @@ public class AuthController {
             cache.set("login_error_count",error_count,10*60);
             String msg = "登录失败";
             if(e instanceof BusinessException){
+
 
                 msg = ((BusinessException) e).getErrorCode();
 

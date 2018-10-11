@@ -101,7 +101,7 @@ public class IndexController extends BaseController {
 //        }
         String temp1 = screenName;
         String temp2 = email;
-        System.out.println(screenName+"----->"+email);
+//        System.out.println(screenName+"----->"+email);
             if(StringUtils.isNotBlank(screenName) && StringUtils.isNotBlank(email)){
                 User temp = new User();
                 temp.setUid(users.getUid());
