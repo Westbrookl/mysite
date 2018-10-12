@@ -5,9 +5,14 @@
         t_contents
     </sql>
 
+    <!--<sql id="BASE_COLUMN">-->
+        <!--c.cid,c.title,c,titlePic,c.slug,c.created,c.modified,c.content,c.authorId,c.type,c.status,c.tags,c.categories,c.hits,-->
+        <!--c.commentsNum,c.allowComment,c.allowPing,c.allowFeed-->
+    <!--</sql>-->
     <sql id="BASE_COLUMN">
-        l.cid,l.title,l,titlePic,l.slug,l.created,l.modified,l.content,l.authorId,l.type,l.status,l.tags,l.categories,l.hits,
-        l.commentsNum,l.allowComment,l.allowPing,l.allowFeed
+        c.cid, c.title, c.titlePic, c.slug, c.created, c.modified, c.content, c.authorId,
+        c.type, c.status, c.tags, c.categories, c.hits, c.commentsNum, c.allowComment,
+        c.allowPing, c.allowFeed
     </sql>
     <!--添加文章
 
@@ -97,43 +102,75 @@
         <include refid="BASE_COLUMN"/>
         FROM
         <include refid="BASE_TABLE"/>
-        AS l WHERE l.cid=#{cid,jdbcType=INTEGER}
+        AS c WHERE c.cid=#{cid,jdbcType=INTEGER}
     </select>
     <!--通过条件获取文章
     -->
-    <select id="getArticleByCond" parameterType="com.dto.cond.ContentCond" resultType="content">
+    <select id="getArticlesByCond" parameterType="com.dto.cond.ContentCond" resultType="content">
+        <!--SELECT-->
+        <!--<include refid="BASE_COLUMN"/>-->
+        <!--FROM-->
+        <!--<include refid="BASE_TABLE"/>-->
+        <!--AS c-->
+        <!--<where>-->
+            <!--<if test="tag!=null">-->
+                <!--AND c.tags LIKE CONCAT('%',#{tag,jdbcType=VARCHAR},'%')-->
+            <!--</if>-->
+            <!--<if test="category!=null">-->
+                <!--AND c.categories LIKE CONCAT('%',#{category,jdbcType=VARCHAR},'%')-->
+            <!--</if>-->
+            <!--<if test=" status != null">-->
+                <!--AND c.status ={#status,jdbcType=VARCHAR}-->
+            <!--</if>-->
+            <!--<if test="title!=null">-->
+                <!--AND c.title LIKE CONCAT('%',#{title,jdbcType=VARCHAR},'%')-->
+            <!--</if>-->
+            <!--<if test="content!=null">-->
+                <!--AND c.content LIKE CONCAT('%',#{content,jdbcType=VARCHAR},'%')-->
+            <!--</if>-->
+            <!--<if test="type!=null">-->
+                <!--AND c.type LIKE CONCAT('%',#{type,jdbcType=VARCHAR},'%')-->
+            <!--</if>-->
+            <!--<if test="startTime !=null ">-->
+                <!--AND c.created >= #{startTime,jdbcType=INTEGER}-->
+            <!--</if>-->
+            <!--<if test="endTime != null">-->
+                <!--AND c.created &lt;= #{endTime, jdbcType=INTEGER}-->
+            <!--</if>-->
+        <!--</where>-->
+        <!--ORDER BY c.created DESC-->
         SELECT
         <include refid="BASE_COLUMN"/>
         FROM
         <include refid="BASE_TABLE"/>
-        AS l
+        AS c
         <where>
-            <if test="tag!=null">
-                AND l.tags LIKE CONCAT('%',#{tag,jdbcType=VARCHAR},'%')
+            <if test="tag != null">
+                AND c.tags LIKE CONCAT('%',#{tag, jdbcType=VARCHAR},'%')
             </if>
-            <if test="category!=null">
-                AND l.categories LIKE CONCAT('%',#{category,jdbcType=VARCHAR},'%')
+            <if test="category != null">
+                AND c.categories LIKE CONCAT('%',#{category, jdbcType=VARCHAR},'%')
             </if>
-            <if test=" status != null">
-                AND l.status ={#status,jdbcType=VARCHAR}
+            <if test="status != null">
+                AND c.status = #{status, jdbcType=VARCHAR}
             </if>
-            <if test="title!=null">
-                AND l.title LIKE CONCAT('%',#{title,jdbcType=VARCHAR},'%')
+            <if test="title != null">
+                AND c.title LIKE CONCAT('%',#{title, jdbcType=VARCHAR},'%')
             </if>
-            <if test="content!=null">
-                AND l.content LIKE CONCAT('%',#{content,jdbcType=VARCHAR},'%')
+            <if test="content != null">
+                AND c.content LIKE CONCAT('%',#{content, jdbcType=VARCHAR},'%')
             </if>
-            <if test="type!=null">
-                AND l.type LIKE CONCAT('%',#{type,jdbcType=VARCHAR},'%')
+            <if test="type != null">
+                AND c.type = #{type, jdbcType=VARCHAR}
             </if>
-            <if test="startTime !=null ">
-                AND l.created >= #{startTime,jdbcType=INTEGER}
+            <if test="startTime != null">
+                AND c.created &gt;= #{startTime, jdbcType=INTEGER}
             </if>
             <if test="endTime != null">
-                AND l.created &lt;= #{endTime, jdbcType=INTEGER}
+                AND c.created &lt;= #{endTime, jdbcType=INTEGER}
             </if>
         </where>
-        ORDER BY l.created DESC
+        ORDER BY c.created DESC
     </select>
     <!--得到所有的文章以创建时间排序
 

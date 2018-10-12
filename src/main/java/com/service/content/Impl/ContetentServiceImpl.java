@@ -55,7 +55,7 @@ public class ContetentServiceImpl implements ContentService {
         if(cid == null){
             throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
         }
-        deleteArticleById(cid);
+        contentDao.deleteArticleById(cid);
         /**
          * 删除标签下面的评论并没有完成
          */

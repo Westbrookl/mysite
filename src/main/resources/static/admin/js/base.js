@@ -16,7 +16,7 @@ $.tale.prototype.alertError =  function(options){
     options.showCancleButton = true;
     options.type = "question";
     this.alertBox(options);
-}
+};
 $.tale.prototype.alertOK = function(options){
     options = options.length?{text:options}:(options||{});
     options.title = options.title ||'操作成功';
@@ -25,7 +25,37 @@ $.tale.prototype.alertOK = function(options){
     options.showCloseButton = false;
     options.type = 'success';
     this.alertBox(options);
+};
+/**
+ *
+ * @param options
+ */
+$.tale.prototype.alertOkAndReload = function(text){
+    this.alertOK({
+        text:text,then:function () {
+            setTimeout(function () {
+                window.location.reload();
+            });
+        }
+    });
 }
+
+// $.tale.prototype.alertConfirm = function(options){
+//     options = options.length?{text:options}:(options||{});
+//     options.title = options.title || "确定要删除吗？";
+//     options.text = options.text;
+//     options.showCancelButton =true;
+//     options.type = 'question';
+//     this.alertBox(options);
+// };
+$.tale.prototype.alertConfirm = function (options) {
+    options = options || {};
+    options.title = options.title || '确定要删除吗？';
+    options.text = options.text;
+    options.showCancelButton = true;
+    options.type = 'question';
+    this.alertBox(options);
+};
 /**
  * 公共弹框
  * @param options
