@@ -1,0 +1,75 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dao.RelationshipDao">
+    <sql id="BASE_TABLE">
+        t_relationships
+    </sql>
+    <sql id="BASE_COLUMN">
+        rs.cid,rs.mid
+    </sql>
+
+    <insert id="addRelationship" parameterType="relationship">
+        INSERT INTO
+        <include refid="BASE_TABLE"/>
+        <trim prefix="(" suffixOverrides="," suffix=")">
+            cid,mid,
+        </trim>
+        <trim prefix="VALUES(" suffix=")" suffixOverrides=",">
+            #{cid,jdbcType=INTEGER},
+            #{mid,jdbcType=INTEGER},
+        </trim>
+
+    </insert>
+
+    <delete id="deleteRelationshipById">
+        DELETE  FROM
+        <include refid="BASE_TABLE"/>
+        WHERE cid = #{cid,jdbcType=INTEGER}
+        AND mid=#{mid,jdbcType=INTEGER}
+    </delete>
+
+    <delete id="deleteRelationshipByCid">
+        DELETE FROM
+        <include refid="BASE_TABLE"/>
+        WHERE mid=#{mid,jdbcType=INTEGER}
+    </delete>
+
+    <delete id="deleteRelationshipByMid">
+            DELETE FROM
+            <include refid="BASE_TABLE"/>
+            WHERE cid=#{cid,jdbcType=INTEGER}
+    </delete>
+
+    <update id="updateRelationship" parameterType="relationship">
+        UPDATE
+        <include refid="BASE_TABLE"/>
+        <set>
+            mid=#{mid,jdbcType=INTEGER}
+        </set>
+        WHERE cid=#{cid,jdbcType=INTEGER}
+    </update>
+
+    <select id="getRelationshipByCid" resultType="relationship">
+        SELECT
+        <include refid="BASE_COLUMN"/>
+        FROM
+        <include refid="BASE_TABLE"/>
+        AS rs
+        WHERE rs.cid=#{cid,jdbcType=INTEGER}
+    </select>
+
+    <select id="getRelationshipByMid" resultType="relationship">
+        SELECT
+        <include refid="BASE_COLUMN"/>
+        FROM
+        <include refid="BASE_TABLE"/>
+        AS rs
+        WHERE rs.mid=#{mid,jdbcType=INTEGER}
+    </select>
+
+    <select id="getCountById" resultType="java.lang.Long">
+        SELECT  count(*)
+        FROM
+        <include refid="BASE_TABLE"/>
+        WHERE cid=#{cid,jdbcType=INTEGER} AND mid=#{mid,jdbcType=INTEGER}
+    </select>
+</mapper>

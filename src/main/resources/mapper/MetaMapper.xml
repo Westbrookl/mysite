@@ -3,23 +3,24 @@
     <sql id="BASE_TABLE">
         t_metas
     </sql>
+
     <sql id="RELATION_SHIP_TABLE">
-        t_relationships
-    </sql>
-    <sql id="BASE_COLUMN">
-        m.mid,m.name,m.slug,m.type,m.description,m.sort,m.parent
+        <include refid="com.dao.RelationshipDao.BASE_TABLE"/>
     </sql>
 
+    <sql id="BASE_COLUMN">
+      m.mid,m.name,m.slug,m.type,m.contentType,description,sort,parent
+    </sql>
 
     <insert id="addMeta" parameterType="meta" useGeneratedKeys="true" keyProperty="mid">
         INSERT INTO
-        <include refid="BASE_COLUMN"/>
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            name,slug,type,description,sort,parent
+        <include refid="BASE_TABLE"/>
+        <trim prefix="(" suffixOverrides="," suffix=")">
+            name,slug,type,contentType,description,sort,parent,
         </trim>
         <trim prefix="VALUES(" suffix=")" suffixOverrides=",">
-            #{name,jdbcType=VARCHAR},#{slug,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR},#{descrption,jdbcType=VARCHAR},#{sort,jdbcType=INTEGER},
-            #{parent,jdbcType=INTEGER}
+            #{name,jdbcType=VARCHAR},#{slug,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR},#{description,jdbcType=VARCHAR},#{sort,jdbcType=INTEGER},
+            #{parent,jdbcType=INTEGER},
         </trim>
     </insert>
 
@@ -29,7 +30,6 @@
         WHERE mid=#{mid,jdbcType=INTEGER}
     </delete>
 
-    <!--更新项目-->
     <update id="updateMeta" parameterType="meta">
         UPDATE
         <include refid="BASE_TABLE"/>
@@ -38,82 +38,84 @@
                 name=#{name,jdbcType=VARCHAR},
             </if>
             <if test="slug!=null">
-                slug=#{slug,jdbcType=VARCHAR},
+                name=#{slug,jdbcType=VARCHAR},
             </if>
             <if test="type!=null">
-                type=#{type,jdbcType=VARCHAR},
+                name=#{type,jdbcType=VARCHAR},
             </if>
             <if test="description!=null">
-                description=#{description,jdbcType=VARCHAR},
+                name=#{description,jdbcType=VARCHAR},
             </if>
             <if test="sort!=null">
                 sort=#{sort,jdbcType=INTEGER},
             </if>
             <if test="parent!=null">
-                parent=#{parent,jdbcType=INTEGER},
+                sort=#{parent,jdbcType=INTEGER},
             </if>
         </set>
-        where mid=#{mid,jdbcType=INTEGER}
+        WHERE mid=#{mid,jdbcType=INTEGER}
     </update>
-    <!--通过ID获取内容-->
-    <select id="selectMetaById">
+
+    <select id="getMetaById" resultType="meta">
         SELECT
         <include refid="BASE_COLUMN"/>
         FROM
-        <include refid="BASE_TABLE"/> AS m
-        WHERE mid=#{mid,jdbcType=INTEGER}
+        <include refid="BASE_TABLE"/>
+        AS m
+        WHERE m.mid=#{mid,jdbcType=INTEGER}
     </select>
 
-    <!--通过条件获取-->
-    <select id="selectMetasByCond" parameterType="com.dto.MetaDto" resultType="meta">
+    <select id="getMetasByCond" parameterType="com.dto.cond.MetaCond">
         SELECT
         <include refid="BASE_COLUMN"/>
         FROM
-        <include refid="BASE_TABLE"/> AS m
+        <include refid="BASE_TABLE"/>
+        AS m
         <where>
             <if test="name!=null">
-                m.name=#{name,jdbcType=VARCHAR}
+                AND m.name=#{name,jdbcType=VARCHAR}
             </if>
             <if test="type!=null">
-                AND m.type=#{type,jdbcType=VARCHAR}
+                AND m.type = #{type ,jdbcType=VARCHAR}
             </if>
         </where>
         ORDER BY m.sort
     </select>
 
-    <!--获取标签下面所有的内容-->
-    <select id="getMetasCountByType">
+    <select id="getMetasByType" resultType="java.lang.Long">
         SELECT count(*)
         FROM
         <include refid="BASE_TABLE"/>
-        WHERE type=#{type,jdbcType=VARCHAR}
+        WHERE
+        type =#{type ,jdbcType=VARCHAR}
     </select>
 
-    <!--关于relationship的部分不是很懂-->
-    <resultMap id="BaseResultMap" type="meta">
+    <resultMap id="metaResult" type="meta">
         <id column="mid" jdbcType="INTEGER" property="mid"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="slug" jdbcType="VARCHAR" property="slug"/>
-        <result column="type" jdbcType="VARCHAR" property="type"/>
-        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="type" jdbcType="VARCHAR"  property="type"/>
+        <result column="description" jdbcType="VARCHAR"  property="description"/>
         <result column="sort" jdbcType="INTEGER" property="sort"/>
         <result column="parent" jdbcType="INTEGER" property="parent"/>
     </resultMap>
 
-    <resultMap id="metaDto" type="com.dto.MetaDto" extends="BaseResultMap">
-        <result column="count" jdbcType="INTEGER" property="count"/>
+    <resultMap id="MetaDto" type="com.dto.MetaDto" extends="metaResult">
+        <result column="count" property="count" jdbcType="INTEGER"/>
     </resultMap>
 
-    <select id="selectFromSql" parameterType="Map" resultMap="metaDto">
+    <select id="selectFromSql" resultMap="MetaDto" parameterType="Map">
         SELECT
-          a.*,
-          COUNT(b.cid) AS count
-        FROM <include refid="BASE_TABLE"/> as a
-        LEFT JOIN <include refid="RELATION_SHIP_TABLE"/> as b ON a.mid=b.mid
-        WHERE a.type=#{type,jdbcType=VARCHAR}
+        a.*,count(b.cid) as count
+        FROM
+        <include refid="BASE_TABLE"/>
+        AS a
+        left  join
+        <include refid="RELATION_SHIP_TABLE"/>
+        AS b on a.mid = b.mid
+        WHERE a.type = #{type}
         GROUP BY a.mid
         ORDER BY #{order}
         LIMIT #{limit}
     </select>
-
 </mapper>

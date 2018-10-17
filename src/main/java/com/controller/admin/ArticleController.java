@@ -226,7 +226,7 @@ public class ArticleController {
     ){
 
             contentService.deleteArticleById(cid);
-//            logService.addLog(LogActions.DEL_ARTICLE.getAction(),null,request.getRemoteAddr(),user.getUid());//关于这个怎么获得当前用户的设计很巧妙
+            //logService.addLog(LogActions.DEL_ARTICLE.getAction(),null,request.getRemoteAddr(),user.getUid());//关于这个怎么获得当前用户的设计很巧妙
 
              return APIResponse.success();
     }

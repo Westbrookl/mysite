@@ -40,6 +40,14 @@ $.tale.prototype.alertOkAndReload = function(text){
     });
 }
 
+$.tale.prototype.alertWarn = function (options) {
+    options = options.length ? {text: options} : (options || {});
+    options.title = options.title || '警告信息';
+    options.text = options.text;
+    options.timer = 3000;
+    options.type = 'warning';
+    this.alertBox(options);
+};
 // $.tale.prototype.alertConfirm = function(options){
 //     options = options.length?{text:options}:(options||{});
 //     options.title = options.title || "确定要删除吗？";

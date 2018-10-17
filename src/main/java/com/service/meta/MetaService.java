@@ -1,5 +1,6 @@
 package com.service.meta;
 
+import com.dao.MetaDao;
 import com.dto.MetaDto;
 import com.dto.cond.MetaCond;
 import com.entity.Meta;
@@ -8,76 +9,70 @@ import java.util.List;
 
 /**
  * @author jhc
- * @date 2018-10-03
- * 逻辑层
+ * @date 2018-10-17
+
+
 
 */
-public interface MetaService  {
+public interface MetaService{
     /**
-     * 增加标签
+     * 服务增加项目
      * @param meta
      */
     void addMeta(Meta meta);
 
     /**
-     * 添加
-     * @param type
-     * @param name
-     * @param mid
-     */
-    void saveMeta(String type,String name,Integer mid);
-
-    /**
-     * 批量添加
-     * @param mid
-     * @param type
-     * @param name
-     */
-    void addMetas(Integer mid,String type,String name);
-
-    /**
-     * 添加或者更新
-     * @param mid
+     * 保存项目
      * @param name
      * @param type
+     * @param mid
      */
-    void saveOrUpdate(Integer mid,String name,String type);
+    void saveMeta(String name,String type,Integer mid);
 
     /**
-     * 删除内容
+     * 保存多个项目，批量增加
+     * @param cid
+     * @param names
+     * @param type
+     */
+    void addMetas(Integer cid,String names,String type);
+
+    /**
+     * 增加或者更新
+     * @param cid
+     * @param name
+     * @param type
+     */
+    void saveOrUpdate(Integer cid,String name,String type);
+
+    /**
+     * 删除项目
      * @param mid
      */
     void deleteMetaById(Integer mid);
 
     /**
-     * 跟新标签
+     * 更新项目
      * @param meta
      */
     void updateMeta(Meta meta);
 
     /**
-     * 通过Id获取标签内容
+     * 通过id获得项目
      * @param mid
      * @return
      */
     Meta getMetaById(Integer mid);
 
     /**
-     * 通过条件获取标签内容
+     * 获取所有项目
      * @param metaCond
      * @return
      */
     List<Meta> getMetas(MetaCond metaCond);
 
     /**
-     * 统计类型下面的内容
-     * @param type
-     * @return
-     */
-    Long getMetasCountByType(String type);
-
-    /**
-     * 这个不是很懂
+     * 根据类型查询项目列表，带项目下面的文章数
      * @param type
      * @param orderby
      * @param limit

@@ -46,42 +46,46 @@
         UPDATE
         <include refid="BASE_TABLE"/>
         <set>
+            <if test="title != null">
+                title = #{title, jdbcType=VARCHAR},
+            </if>
             <if test="titlePic!=null">
-                titlePic=#{titlepic,jdbctType=VARCHAR},
+                titlePic=#{titlepic,jdbcType=VARCHAR},
             </if>
             <if test="slug!=null">
-                slug=#{slug,jdbctType=VARCHAR},
+                slug=#{slug,jdbcType=VARCHAR},
             </if>
             <if test="content!=null">
-                content=#{content,jdbctType=LONGVARCHAR},
+                content=#{content,jdbcType=LONGVARCHAR},
             </if>
-            midified = UNIX_TIMESTAMP(NOW()),
+--             modified = UNIX_TIMESTAMP(NOW()),
+            modified = UNIX_TIMESTAMP(NOW()),
             <if test="type!=null">
-                type=#{type,jdbctType=VARCHAR},
+                type=#{type,jdbcType=VARCHAR},
             </if>
             <if test="status!=null">
-                status=#{status,jdbctType=VARCHAR},
+                status=#{status,jdbcType=VARCHAR},
             </if>
             <if test="tags!=null">
-                tags=#{tags,jdbctType=VARCHAR},
+                tags=#{tags,jdbcType=VARCHAR},
             </if>
             <if test="categories!=null">
-                categories=#{categories,jdbctType=VARCHAR},
+                categories=#{categories,jdbcType=VARCHAR},
             </if>
             <if test="hits!=null">
-                hits=#{hits,jdbctType=INTEGER},
+                hits=#{hits,jdbcType=INTEGER},
             </if>
             <if test="commentsNum!=null">
-                commentsNum=#{commentsNum,jdbctType=INTEGER},
+                commentsNum=#{commentsNum,jdbcType=INTEGER},
             </if>
             <if test="allowComment!=null">
-                allowComment=#{allowComment,jdbctType=INTEGER},
+                allowComment=#{allowComment,jdbcType=INTEGER},
             </if>
             <if test="allowPing!=null">
-                allowPing=#{allowPing,jdbctType=INTEGER},
+                allowPing=#{allowPing,jdbcType=INTEGER},
             </if>
             <if test="allowFeed!=null">
-                allowFeed=#{allowFeed,jdbctType=INTEGER},
+                allowFeed=#{allowFeed,jdbcType=INTEGER},
             </if>
         </set>
         WHERE cid=#{cid,jdbcType=INTEGER}

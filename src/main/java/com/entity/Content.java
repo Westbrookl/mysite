@@ -69,7 +69,7 @@ public class Content {
     /**
      * 是否允许Ping
      */
-    private Integer allowedPing;
+    private Integer allowPing;
     /**
      * 允许出现在聚合类
      */
@@ -195,12 +195,12 @@ public class Content {
         this.allowComment = allowComment;
     }
 
-    public Integer getAllowedPing() {
-        return allowedPing;
+    public Integer getAllowPing() {
+        return allowPing;
     }
 
-    public void setAllowedPing(Integer allowedPing) {
-        this.allowedPing = allowedPing;
+    public void setAllowPing(Integer allowPing) {
+        this.allowPing = allowPing;
     }
 
     public Integer getAllowFeed() {

@@ -70,7 +70,7 @@ public class ContetentServiceImpl implements ContentService {
         if(content == null){
             throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
         }
-        updateArticleById(content);
+        contentDao.updateArticleById(content);
     }
 
     @Override

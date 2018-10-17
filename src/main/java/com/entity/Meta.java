@@ -2,42 +2,37 @@ package com.entity;
 
 import java.io.Serializable;
 
-/**
- * @author jhc on 2018/10/3
- */
-public class Meta implements Serializable {
-    private static final long SerialVersionUID = 1L;
+public class Meta implements Serializable{
+    private static final long serialVersionUID = 1L;
     /**
-     * 项目主键
+     * 项目的主键
      */
     private Integer mid;
     /**
-     * 名称
+     * 项目的名称
      */
     private String name;
     /**
-     * 缩略名
+     * 项目的缩略名
+     *
      */
     private String slug;
     /**
-     * 标签类型
+     * 项目的类型
      */
     private String type;
     /**
-     * 文章类型
+     * 对应的文章类型
      */
     private String contentType;
     /**
-     * 描述
+     * 对于文章的描述
      */
     private String description;
     /**
-     * 排序
+     * 项目排序
      */
-    private Integer sort;
-    /**
-     * 父标签
-     */
+    private  Integer sort;
     private Integer parent;
 
     public Integer getMid() {
