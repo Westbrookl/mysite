@@ -1,6 +1,7 @@
 package com.service.content.Impl;
 
 import com.constant.ErrorConstant;
+import com.constant.Types;
 import com.constant.WebConst;
 import com.dao.ContentDao;
 import com.dto.cond.ContentCond;
@@ -9,6 +10,7 @@ import com.exception.BusinessException;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.service.content.ContentService;
+import com.service.meta.MetaService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,9 @@ import java.util.List;
 public class ContetentServiceImpl implements ContentService {
     @Autowired
     private ContentDao contentDao;
+
+    @Autowired
+    private MetaService metaService;
 
     @Override
     public void addArticle(Content content) {
@@ -48,6 +53,10 @@ public class ContetentServiceImpl implements ContentService {
         String category = content.getCategories();
         String meta = content.getTags();
         contentDao.addArticle(content);
+
+        int cid  = content.getCid();
+        metaService.addMetas(cid,meta, Types.TAG.getType());
+        metaService.addMetas(cid,category,Types.CATEGORY.getType());
     }
 
     @Override

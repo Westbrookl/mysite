@@ -109,6 +109,7 @@ public class MetaServiceImpl implements MetaService {
     /**
      * 保存的是创建一个新的标签
      * 更新的是一个文章对象的标签下面的名字
+     * 只有save但我感觉没有update
      * @param cid
      * @param name
      * @param type
@@ -143,6 +144,9 @@ public class MetaServiceImpl implements MetaService {
                 relationship.setMid(mid);
                 relationshipDao.addRelationship(relationship);
             }
+//            }else{
+//
+//            }
         }
     }
 

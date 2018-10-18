@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h4>分类/标签管理</h4>
+<div>
+    <th:block th:each="c:${categories}">
+        <div>
+            <th:block th:if="${c.name=='默认分类'}">
+                <th:block th:text="${c.name}"/>
+                <th:block th:text="'('+ ${c.count} + ')'"/>
+            </th:block>
+        </div>
+        <th:block th:unless="${c.name=='默认分类'}">
+            <th:block th:text="${c.name}"/>
+            <th:block th:text="'('+${c.count}+')'"/>
+            <ul>
+                <li><a href="javascript:void(0)" th:attr="mid=${c.mid},cname=${c.name}"  class="edit-category">修改</a>
+                </li>
+                <li><a href="javascript:void(0)" th:attr="mid=${c.mid}" class="del-category">删除</a></li>
+            </ul>
+        </th:block>
+    </th:block>
+</div>
+<div>
+
+    <h1>分类列表</h1>
+    <th:block th:each="c:${tags}">
+        <div>
+            <th:block th:text="${c.name}"/>
+            <th:block th:text="'('+${c.count}+')'"/>
+            <ul>
+                <li><a href="javascript:void(0) " th:attr="mid=${c.mid}"class="del-category">删除</a> </li>
+            </ul>
+        </div>
+    </th:block>
+</div>
+
+<div>
+    <form id="cform" role="form">
+        <input type="hidden" id="mid"/>
+        <input type="text" id="cname" placeholder="请输入分类名称"/>
+        <button id="save"  type="button">保存分类</button>
+    </form>
+</div>
+<div th:replace="admin/footer::footer"></div>
+<script type="text/javascript">
+    var tale = new $.tale();
+    $('#save').click(function () {
+        var cname = $('#cname').val();
+        var mid = $('#cform#mid').val();
+        if(cname && cname !=''){
+            tale.post({
+               url:'/admin/category/save',
+               data:{mid:mid,cname:cname},
+               success:function (result) {
+                   $('#cform#mid').val('');
+                   $('#cform#cname').val('');
+                   if(result && result=='success'){
+                       tale.alertOkAndReload('分类保存成功');
+                   }else {
+                       tale.alertError(result.msg || '分类保存失败');
+                   }
+               }
+            });
+        }
+    });
+    $('.edit-category').click(function () {
+        var mid = $(this).attr('mid');
+        var cname = $(this).attr('cname');
+        $('#cform #mid').val(mid);
+        $('#cform #cname').val(cname);
+    });
+
+    $('.del-category').click(function () {
+        var mid = $(this).attr('mid');
+        tale.alertConfirm({
+            title: '确定删除该项吗?',
+            then: function () {
+                tale.post({
+                    url: '/admin/category/delete',
+                    data: {mid: mid},
+                    success: function (result) {
+                        if (result && result.code == 'success') {
+                            tale.alertOkAndReload('删除成功');
+                        } else {
+                            tale.alertError(result.msg || '删除失败');
+                        }
+                    }
+                });
+            }
+        });
+    });
+</script>
+</body>
+</html>
