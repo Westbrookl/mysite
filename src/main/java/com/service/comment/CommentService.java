@@ -1,6 +1,5 @@
 package com.service.comment;
 
-
 import com.dto.cond.CommentCond;
 import com.entity.Comment;
 import com.github.pagehelper.PageInfo;
@@ -8,13 +7,13 @@ import com.github.pagehelper.PageInfo;
 import java.util.List;
 
 /**
-  * @author jhc
-  * @date 2018-09-30
-    评论服务层
+ * @author jhc
+ * @date 2018-10-24
+ 
+ 
 
-
- */
-public interface CommentService {
+*/
+public interface CommentService{
     /**
      * 增加评论
      * @param comment
@@ -28,29 +27,32 @@ public interface CommentService {
     void deleteComment(Integer coid);
 
     /**
-     * 更新评论状态
+     * 通过id获取评论
      * @param coid
-     * @param status
-     */
-    void updateCommentStatus(Integer coid,String status);
-    /**
-     * 通过评论主键得到评论
+     * @return
      */
     Comment getCommentById(Integer coid);
 
     /**
-     * 根据文章编号获取评论列表
+     * 更新评论
+     * @param coid
+     * @param status
+     */
+    void updateComment(Integer coid,String status);
+
+    /**
+     * 通过文章主键获取评论
      * @param cid
      * @return
      */
-    List<Comment> getCommentByCId(Integer cid);
+    List<Comment> getCommentsByCId(Integer cid);
 
     /**
-     * 根据条件获取评论列表
+     * 通过条件获取评论
      * @param commentCond
      * @param pageNum
      * @param pageSize
      * @return
      */
-    PageInfo<Comment> getCommentByCond(CommentCond commentCond,int pageNum,int pageSize);
+    PageInfo<Comment> getCommentsByCond(CommentCond commentCond,int pageNum,int pageSize);
 }

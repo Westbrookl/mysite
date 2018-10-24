@@ -35,6 +35,14 @@ public class CategoryController{
         return "admin/category";
     }
 
+    /**
+     * 保存分类的逻辑 传入的有 name和id
+     * 首先要判断name是否存在
+     * name存在的话，传入type以及 mid
+     * @param cname
+     * @param mid
+     * @return
+     */
     @ApiOperation("保存分类")
     @RequestMapping(value = "/save",method = RequestMethod.POST)
     @ResponseBody
